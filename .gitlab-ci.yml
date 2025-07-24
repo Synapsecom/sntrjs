@@ -27,11 +27,11 @@ update_sentry_browser_js_script:
     - 'echo "" >> scout.js'
 
     # 3. Download and append the latest bundle from CDN
-    - 'echo "Downloading bundle.tracing.min.js for version $sentry_browser_latest_version..."'
-    - 'curl -sL "https://browser.sentry-cdn.com/${sentry_browser_latest_version}/bundle.tracing.min.js" >> scout.js'
+    - 'echo "Downloading bundle.min.js for version $sentry_browser_latest_version..."'
+    - 'curl -sL "https://browser.sentry-cdn.com/${sentry_browser_latest_version}/bundle.min.js" >> scout.js'
 
     # 4. Replace source map url to point to official one
-    - 'sed -i "s|sourceMappingURL=.*$|sourceMappingURL=https://browser.sentry-cdn.com/${sentry_browser_latest_version}/bundle.tracing.min.js.map|g" scout.js'
+    - 'sed -i "s|sourceMappingURL=.*$|sourceMappingURL=https://browser.sentry-cdn.com/${sentry_browser_latest_version}/bundle.min.js.map|g" scout.js'
 
     # 5. Commit and push if changes exist
     - 'git config user.email "ci@synapsecom.gr"'
