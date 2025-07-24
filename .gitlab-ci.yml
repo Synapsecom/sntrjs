@@ -1,39 +1,39 @@
 ---
 stages:
-  - update
+  - 'update'
 
 variables:
-  GIT_STRATEGY: clone
+  GIT_STRATEGY: 'clone'
   GIT_DEPTH: 1
 
-update_sentry_browser:
-  stage: update
+update_sentry_browser_js_script:
+  stage: 'update'
   before_script:
-    - which docker || { echo "Docker not installed on this runner!"; exit 1; }
+    - 'which docker || { echo "Docker not installed on this runner!"; exit 1; }'
   script:
     # 1. Get latest Sentry Browser version using Docker (Node official image)
-    - echo "Fetching latest @sentry/browser version using Docker..."
-    - export sentry_browser_latest_version=$(docker run --rm node:20-alpine sh -c "npm view @sentry/browser version")
-    - echo "Latest version: ${sentry_browser_latest_version}"
+    - 'echo "Fetching latest @sentry/browser version using Docker..."'
+    - 'export sentry_browser_latest_version=$(docker run --rm node:20-alpine sh -c "npm view @sentry/browser version")'
+    - 'echo "Latest version: ${sentry_browser_latest_version}"'
 
     # 2. Create scout.js with MIT License header
-    - echo "Creating scout.js..."
-    - echo '/*!' > scout.js
-    - echo ' * Sentry JavaScript SDK (Browser)' >> scout.js
-    - echo ' * MIT License' >> scout.js
-    - echo ' * Copyright (c) 2012 Functional Software, Inc. dba Sentry' >> scout.js
-    - echo ' * Source: https://github.com/getsentry/sentry-javascript' >> scout.js
-    - echo ' */' >> scout.js
-    - echo '' >> scout.js
+    - 'echo "Creating scout.js..."'
+    - 'echo "/*!" > scout.js'
+    - 'echo " * Sentry JavaScript SDK (Browser)" >> scout.js'
+    - 'echo " * MIT License" >> scout.js'
+    - 'echo " * Copyright (c) 2012 Functional Software, Inc. dba Sentry" >> scout.js'
+    - 'echo " * Source: https://github.com/getsentry/sentry-javascript" >> scout.js'
+    - 'echo " */" >> scout.js'
+    - 'echo "" >> scout.js'
 
     # 3. Download and append the latest bundle from CDN
-    - echo "Downloading bundle.tracing.min.js for version $sentry_browser_latest_version..."
-    - curl -sL "https://browser.sentry-cdn.com/${sentry_browser_latest_version}/bundle.tracing.min.js" >> scout.js
+    - 'echo "Downloading bundle.tracing.min.js for version $sentry_browser_latest_version..."'
+    - 'curl -sL "https://browser.sentry-cdn.com/${sentry_browser_latest_version}/bundle.tracing.min.js" >> scout.js'
 
     # 4. Commit and push if changes exist
-    - git config user.email "ci@synapsecom.gr"
-    - git config user.name "Scout"
-    - git add scout.js
+    - 'git config user.email "ci@synapsecom.gr"'
+    - 'git config user.name "Scout"'
+    - 'git add scout.js'
     - |
       if ! git diff --cached --quiet; then
         git commit -m "Update Sentry Browser SDK to v${sentry_browser_latest_version}"
@@ -42,4 +42,4 @@ update_sentry_browser:
         echo "No changes detected. Skipping push."
       fi
   only:
-    - main
+    - 'main'
